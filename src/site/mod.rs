@@ -1,3 +1,4 @@
+pub use macrowind::*;
 use std::fs::File;
 use std::io::Write;
 use std::path::Path;
@@ -25,6 +26,9 @@ impl Site {
             "src/site/css/style.scss",
             &css_options.style(OutputStyle::Compressed),
         )?;
+        let (class, style) = macrowind::tw!("container");
+        println!("class: {}", class);
+        println!("style: {}", style);
         Ok(css)
     }
 
