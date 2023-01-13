@@ -36,7 +36,7 @@ fn create_social_cards(config: &Config) -> Vec<Box<meta<String>>> {
 
 pub fn build(config: &Config, content: String) -> String {
     let theme = theme::css_class(&config.theme);
-    let classlist: &str = &format!("body {}", theme)[..];
+    let classlist: &str = &format!("{}", theme)[..];
     let description = &config.description;
     let homepage = config.homepage.as_ref().map(|homepage| {
         html!(
@@ -58,12 +58,12 @@ pub fn build(config: &Config, content: String) -> String {
     <meta property="og:type" content="website" />
     <meta property="og:title" content=&config.name />
     {social_meta}
-    <link rel="stylesheet" href="styles.css"></link>
+    <link rel="stylesheet" href="http://sarahghp.com/wrapped-fringe.css"></link>
     </head>
-    <body>
-    <div class=classlist>
+    <body class=classlist>
+    <div class="container">
         {banner}
-        <div class="container">{ unsafe_text!(content) }</div>
+        <main class="main">{ unsafe_text!(content) }</main>
     </div>
     </body>
     </html>
