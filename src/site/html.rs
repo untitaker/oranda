@@ -47,7 +47,7 @@ pub fn build(config: &Config, content: String) -> String {
     let banner = repo_banner(config);
 
     let doc: DOMTree<String> = html!(
-    <html lang="en" id="oranda">
+    <html lang="en" id="oranda" class=classlist>
     <head>
     <title>{ text!(&config.name) }</title>
     <meta charset="utf-8" />
@@ -60,10 +60,10 @@ pub fn build(config: &Config, content: String) -> String {
     {social_meta}
     <link rel="stylesheet" href="http://sarahghp.com/wrapped-fringe.css"></link>
     </head>
-    <body class=classlist>
+    <body>
     <div class="container">
         {banner}
-        <main class="main">{ unsafe_text!(content) }</main>
+        <main>{ unsafe_text!(content) }</main>
     </div>
     </body>
     </html>
@@ -74,10 +74,10 @@ pub fn build(config: &Config, content: String) -> String {
 fn repo_banner(config: &Config) -> Option<Box<div<String>>> {
     config.repository.as_ref().map(|repository| {
         html!(
-                  <div class="repo_banner">
+                      <div class="repo_banner">
                      <a href=repository>
                          <div class="icon" aria-hidden="true"/>
-                        {text!("Check out our GitHub")}
+                        <div>{text!("Check out our GitHub")}</div>
                     </a>
          </div>
         )
