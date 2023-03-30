@@ -70,24 +70,13 @@ impl Serve {
                 )
             });
         let prefix_route = format!("/{}", prefix);
-        let oranda_route = format!("/{}/oranda.css", prefix);
-        let custom_route = format!("/{}/custom.css", prefix);
-        let app = Router::new()
-            .nest_service(&prefix_route, serve_dir)
-            .route(
-                "/oranda.css",
-                get(move || async {
-                    let oranda_route = oranda_route;
-                    Redirect::permanent(&oranda_route)
-                }),
-            )
-            .route(
-                "/custom.css",
-                get(move || async {
-                    let custom_route = custom_route;
-                    Redirect::permanent(&custom_route)
-                }),
-            );
+        let app = Router::new().nest_service(&prefix_route, serve_dir).route(
+            "/",
+            get(move || async {
+                let prefix_route = prefix_route;
+                Redirect::permanent(&prefix_route)
+            }),
+        );
 
         let addr = SocketAddr::from(([127, 0, 0, 1], self.port));
         let msg = format!("Your project is available at: http://{}/{}", addr, prefix);
