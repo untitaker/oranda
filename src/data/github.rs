@@ -5,6 +5,38 @@ use reqwest::header::USER_AGENT;
 use serde::{Deserialize, Serialize};
 use url::Url;
 
+#[derive(Debug)]
+pub struct GithubRepo {
+    owner: String,
+    name: String,
+}
+
+impl GithubRepo {
+    pub fn from(repo_url: &str) -> Result<Self> {
+        let repo_parsed = match Url::parse(repo_url).into_diagnostic() {
+            Ok(parsed) => Ok(parsed),
+            Err(e) => Err(OrandaError::RepoParseError {
+                repo: repo_url.to_string(),
+                details: e,
+            }),
+        };
+        let binding = repo_parsed?;
+        let segment_list = binding.path_segments().map(|c| c.collect::<Vec<_>>());
+        if let Some(segments) = segment_list {
+            if segments.len() == 2 {
+                return Ok(Self {
+                    owner: segments[0].to_string(),
+                    name: segments[1].to_string(),
+                });
+            }
+        }
+        Err(OrandaError::RepoParseError {
+            repo: binding.to_string(),
+            details: miette!("This URL is not structured the expected way, expected more segments"),
+        })
+    }
+}
+
 #[derive(Debug, Serialize, Deserialize)]
 pub struct GithubRelease {
     pub url: String,
@@ -41,41 +73,19 @@ pub struct GithubReleaseAsset {
 }
 
 impl GithubRelease {
-    pub fn fetch_all(repo: &str) -> Result<Vec<GithubRelease>> {
-        let repo_parsed = match Url::parse(repo).into_diagnostic() {
-            Ok(parsed) => Ok(parsed),
-            Err(e) => Err(OrandaError::RepoParseError {
-                repo: repo.to_string(),
-                details: e,
-            }),
-        };
-        let binding = repo_parsed?;
-        let parts = binding.path_segments().map(|c| c.collect::<Vec<_>>());
-        if let Some(url_parts) = parts {
-            let url = format!(
-                "https://octolotl.axodotdev.host/releases/{}/{}",
-                url_parts[0], url_parts[1]
-            );
-            const VERSION: &str = env!("CARGO_PKG_VERSION");
-            let header = format!("oranda-{}", VERSION);
+    pub fn fetch_all(repo: &GithubRepo) -> Result<Vec<GithubRelease>> {
+        let url = format!(
+            "https://octolotl.axodotdev.host/releases/{}/{}",
+            repo.owner, repo.name
+        );
+        const VERSION: &str = env!("CARGO_PKG_VERSION");
+        let header = format!("oranda-{}", VERSION);
 
-            let releases_response = reqwest::blocking::Client::new()
-                .get(url)
-                .header(USER_AGENT, header)
-                .send()?;
+        let response = reqwest::blocking::Client::new()
+            .get(url)
+            .header(USER_AGENT, header)
+            .send()?;
 
-            Self::parse_response(releases_response)
-        } else {
-            Err(OrandaError::RepoParseError {
-                repo: binding.to_string(),
-                details: miette!(
-                    "This URL is not structured the expected way, expected more segments"
-                ),
-            })
-        }
-    }
-
-    fn parse_response(response: reqwest::blocking::Response) -> Result<Vec<GithubRelease>> {
         match response.error_for_status() {
             Ok(r) => match r.json() {
                 Ok(releases) => Ok(releases),
@@ -85,12 +95,12 @@ impl GithubRelease {
         }
     }
 
-    pub fn has_dist_manifest(&self) -> bool {
+    pub fn asset_url(&self, asset_name: &str) -> Option<String> {
         for asset in &self.assets {
-            if asset.name == "dist-manifest.json" {
-                return true;
+            if asset.name == asset_name {
+                return Some(asset.browser_download_url);
             }
         }
-        false
+        None
     }
 }

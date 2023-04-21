@@ -1,17 +1,16 @@
 use axohtml::elements::{div, span};
 use axohtml::{html, text};
+use cargo_dist_schema::DistManifest;
 
-use crate::config::Config;
-use crate::data::cargo_dist;
 use crate::errors::*;
 
-pub fn build(dist_release: cargo_dist::DistRelease, config: &Config) -> Result<Box<div<String>>> {
+pub fn build(manifest: DistManifest) -> Result<Box<div<String>>> {
     let mut table = vec![];
-    for release in dist_release.manifest.releases.iter() {
-        for artifact_id in release.artifacts.iter() {
-            let artifact = &dist_release.manifest.artifacts[artifact_id];
+    for dist_release in manifest.releases.iter() {
+        for artifact_id in dist_release.artifacts.iter() {
+            let artifact = &manifest.artifacts[artifact_id];
             if let Some(name) = artifact.name.clone() {
-                let url = cargo_dist::download_link(config, &name, &release.app_version)?;
+                let url = cargo_dist::download_link(&name, &dist_release.app_version)?;
                 let kind = cargo_dist::get_kind_string(&artifact.kind);
                 let targets: &String = &artifact.target_triples.clone().into_iter().collect();
                 table.extend(vec![

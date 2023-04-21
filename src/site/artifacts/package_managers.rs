@@ -1,7 +1,6 @@
-use crate::config::Config;
 use crate::errors::*;
-use crate::site::icons;
 use crate::site::markdown::{syntax_highlight, SyntaxTheme};
+use crate::site::{icons, Context};
 use linked_hash_map::LinkedHashMap;
 
 use axohtml::elements::div;
@@ -18,12 +17,12 @@ fn create_package_install_code(code: &str, syntax_theme: &SyntaxTheme) -> String
 // False positive duplicate allocation warning
 // https://github.com/rust-lang/rust-clippy/issues?q=is%3Aissue+redundant_allocation+sort%3Aupdated-desc
 #[allow(clippy::vec_box)]
-pub fn build_list(managers: &LinkedHashMap<String, String>, config: &Config) -> Box<div<String>> {
+pub fn build_list(managers: &LinkedHashMap<String, String>, context: &Context) -> Box<div<String>> {
     let mut list = vec![];
     for (manager, install_code) in managers.iter() {
         list.extend(html!(<li class="list-none"><h5>{text!(manager)}</h5> 
         <div class="install-code-wrapper">
-        {unsafe_text!(create_package_install_code(install_code, &config.syntax_theme))}
+        {unsafe_text!(create_package_install_code(install_code, &context.syntax_theme))}
         <button
             data-copy={install_code}
             class="button primary button">
@@ -46,8 +45,8 @@ pub fn build_list(managers: &LinkedHashMap<String, String>, config: &Config) -> 
 }
 
 pub fn build_header(
-    config: &Config,
     package_managers: &LinkedHashMap<String, String>,
+    syntax_theme: SyntaxTheme,
 ) -> Result<Box<div<String>>> {
     let (manager, hint) = if let Some((manager, hint)) = package_managers.front() {
         (manager, hint)
@@ -56,7 +55,7 @@ pub fn build_header(
             "You are using package managers but none is present, please add one.",
         )));
     };
-    let install_code = create_package_install_code(hint.as_str(), &config.syntax_theme);
+    let install_code = create_package_install_code(hint.as_str(), &syntax_theme);
 
     Ok(html!(<div>
     <h4 class="text-center">{text!(format!("Install with {}", manager))}</h4>

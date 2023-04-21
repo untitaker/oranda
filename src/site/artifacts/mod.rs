@@ -1,50 +1,69 @@
-use crate::config::artifacts::Artifacts;
-use crate::config::Config;
-use crate::data::cargo_dist;
-use crate::errors::*;
+use axohtml::elements::div;
+use axohtml::html;
 
-pub mod header;
+use crate::errors::*;
+use crate::site::Context;
+
 mod installers;
 mod package_managers;
 mod table;
 
-use axohtml::html;
+pub struct ArtifactsPage {
+    installer_list: Option<Box<div<String>>>,
+    package_manager_list: Option<Box<div<String>>>,
+    artifacts_table: Option<Box<div<String>>>,
+}
 
-pub fn build(config: &Config) -> Result<String> {
-    let mut html = vec![];
-    let release = cargo_dist::fetch_release(config)?;
+impl ArtifactsPage {
+    pub fn new(context: &Context) -> Result<Self> {
+        let (installer_list, artifacts_table) =
+            if let Some(latest_release) = context.releases.latest() {
+                if let Some(manifest) = latest_release.manifest {
+                    (
+                        Some(installers::build_list(latest_release)?),
+                        Some(table::build(latest_release)?),
+                    )
+                } else {
+                    (None, None)
+                }
+            } else {
+                (None, None)
+            };
 
-    if config.artifacts.is_some() {
-        let mut lists = vec![];
-        if let Some(Artifacts {
-            cargo_dist: Some(true),
-            ..
-        }) = &config.artifacts
-        {
-            lists.extend(installers::build_list(&release, config));
-        }
+        let package_manager_list = if let Some(package_managers) = context.package_managers {
+            Some(package_managers::build_list(&package_managers, context))
+        } else {
+            None
+        };
 
-        if let Some(Artifacts {
-            package_managers: Some(managers),
-            ..
-        }) = &config.artifacts
-        {
-            lists.extend(package_managers::build_list(managers, config));
-        }
-
-        html.extend(html!(
-            <div class="package-managers-downloads">
-                {lists}
-            </div>
-        ));
-    };
-
-    if let Some(Artifacts {
-        cargo_dist: Some(true),
-        ..
-    }) = &config.artifacts
-    {
-        html.extend(table::build(release, config));
+        Ok(Self {
+            installer_list,
+            package_manager_list,
+            artifacts_table,
+        })
     }
-    Ok(html!(<div>{html}</div>).to_string())
+
+    pub fn build(&self) -> Result<String> {
+        Ok(html!(
+            <div><div class="package-managers-downloads">
+            {self.installer_list}
+            {self.package_manager_list}
+            </div>
+            {self.artifacts_table}</div>
+        ))
+    }
+}
+
+pub fn header(context: &Context) -> Result<Option<Box<div<String>>>> {
+    if let Some(latest_release) = context.releases.latest() {
+        if let Some(manifest) = latest_release.manifest {
+            let header = installers::build_header(manifest, context)?;
+            return Ok(Some(header));
+        }
+    }
+    if let Some(package_managers) = &context.package_managers {
+        let header = package_managers::build_header(package_managers, context.syntax_theme)?;
+        return Ok(Some(header));
+    }
+    Ok(None)
 }

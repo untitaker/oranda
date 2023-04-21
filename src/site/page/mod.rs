@@ -2,9 +2,8 @@ use std::path::Path;
 
 use crate::config::Config;
 use crate::errors::*;
-use crate::site::artifacts;
-use crate::site::layout;
 use crate::site::markdown::{self, SyntaxTheme};
+use crate::site::{artifacts, layout, Context};
 
 use axoasset::SourceFile;
 use axohtml::{html, unsafe_text};
@@ -45,10 +44,10 @@ impl Page {
         markdown::to_html(contents, syntax_theme)
     }
 
-    pub fn build(&self, config: &Config) -> Result<String> {
+    pub fn build(&self, context: &Context, config: &Config) -> Result<String> {
         let mut contents = vec![];
         if self.is_index {
-            if let Some(artifacts_header) = artifacts::header::build(config)? {
+            if let Some(artifacts_header) = artifacts::build_header(context)? {
                 contents.push(artifacts_header);
             }
         }

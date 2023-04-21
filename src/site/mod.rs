@@ -1,12 +1,15 @@
 use std::path::Path;
 
 use axoasset::LocalAsset;
+use linked_hash_map::LinkedHashMap;
 
 use crate::config::Config;
+use crate::data::{github::GithubRepo, Releases};
 use crate::errors::*;
 use crate::message::{Message, MessageType};
 
 pub mod artifacts;
+use artifacts::ArtifactsPage;
 pub mod icons;
 pub mod layout;
 use layout::{css, javascript};
@@ -19,6 +22,16 @@ pub mod changelog;
 #[derive(Debug)]
 pub struct Site {
     pages: Vec<Page>,
+    context: Option<Context>,
+}
+
+pub struct Context {
+    path_prefix: Option<String>,
+    changelog: bool,
+    package_managers: Option<LinkedHashMap<String, String>>,
+    repo: GithubRepo,
+    syntax_theme: markdown::SyntaxTheme,
+    releases: Releases,
 }
 
 impl Site {
@@ -30,7 +43,7 @@ impl Site {
             for file_path in files.values() {
                 if page::source::is_markdown(file_path) {
                     let additional_page = Page::new_from_file(config, file_path, false)?;
-                    pages.push(additional_page)
+                    pages.push(additional_page);
                 } else {
                     let msg = format!(
                         "File {} in additional pages is not markdown and will be skipped",
@@ -41,18 +54,54 @@ impl Site {
             }
         }
 
-        if config.artifacts.is_some() {
-            let artifacts_html = artifacts::build(config)?;
-            let artifacts_page = Page::new_from_contents(artifacts_html, "artifacts.html", true);
-            pages.push(artifacts_page)
-        }
-        if config.changelog {
-            let changelog_html = changelog::build(config)?;
-            let changelog_page = Page::new_from_contents(changelog_html, "changelog.html", true);
-            pages.push(changelog_page)
+        let mut context = None;
+        if config.artifacts.is_some() || config.changelog {
+            context = Some(Self::context(config)?);
+            if let Some(latest_release) = context.releases.latest() {
+                let artifacts_html = ArtifactsPage::new(&context)?.build()?;
+                let artifacts_page =
+                    Page::new_from_contents(artifacts_html, "artifacts.html", true);
+                pages.push(artifacts_page);
+            }
+            if config.changelog {
+                let changelog_html = changelog::build(&context)?;
+                let changelog_page =
+                    Page::new_from_contents(changelog_html, "changelog.html", true);
+                pages.push(changelog_page);
+            }
         }
 
-        Ok(Site { pages })
+        Ok(Site { pages, context })
+    }
+
+    fn context(config: &Config) -> Result<Context> {
+        if let Some(repo_url) = config.repository {
+            let repo = GithubRepo::from(&repo_url)?;
+            let releases = Releases::fetch(&repo)?;
+            if let Some(artifacts) = config.artifacts {
+                Ok(Context {
+                    path_prefix: config.path_prefix,
+                    changelog: config.changelog,
+                    package_managers: artifacts.package_managers,
+                    repo,
+                    syntax_theme: config.syntax_theme,
+                    releases,
+                })
+            } else {
+                Ok(Context {
+                    path_prefix: config.path_prefix,
+                    changelog: config.changelog,
+                    package_managers: None,
+                    repo,
+                    syntax_theme: config.syntax_theme,
+                    releases,
+                })
+            }
+        } else {
+            Err(OrandaError::Other(
+                "repo is required for current feature set".to_string(),
+            ))
+        }
     }
 
     pub fn copy_static(dist_path: &String, static_path: &String) -> Result<()> {
@@ -66,7 +115,7 @@ impl Site {
     pub fn write(self, config: &Config) -> Result<()> {
         let dist = &config.dist_dir;
         for page in self.pages {
-            let contents = page.build(config)?;
+            let contents = page.build(&self.context, config)?;
             LocalAsset::write_new(&contents, &page.filename, dist)?;
         }
         if let Some(book_path) = &config.md_book {
