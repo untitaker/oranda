@@ -1,5 +1,3 @@
-mod artifacts;
-
 use crate::config::{analytics, Config};
 use crate::errors::*;
 use crate::site::link;
@@ -7,6 +5,8 @@ use crate::site::link;
 use axoasset::LocalAsset;
 use axohtml::{elements::script, html};
 use camino::Utf8Path;
+
+const ARTIFACTS_SCRIPT_SOURCE: &str = include_str!("./artifacts.js");
 
 pub struct Analytics {
     pub snippet: Option<Box<script<String>>>,
@@ -43,6 +43,6 @@ pub fn build_os_script(path_prefix: &Option<String>) -> String {
 }
 
 pub fn write_os_script(dist_dir: &Utf8Path) -> Result<()> {
-    LocalAsset::write_new(artifacts::SCRIPT, dist_dir.join("artifacts.js"))?;
+    LocalAsset::write_new(ARTIFACTS_SCRIPT_SOURCE, dist_dir.join("artifacts.js"))?;
     Ok(())
 }
