@@ -1,0 +1,56 @@
+<!doctype html><html class="axo dark" id="oranda" lang="en"><head><title>oranda</title><meta content="https://opensource.axo.dev/oranda" property="og:url"/><link href="/oranda/favicon.ico" rel="icon"/><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="🎁 generate beautiful landing pages for your projects" name="description"/><meta content="🎁 generate beautiful landing pages for your projects" name="description"/><meta content="🎁 generate beautiful landing pages for your projects" property="og:description"/><meta content="website" property="og:type"/><meta content="oranda" property="og:title"/><meta content="interest-cohort=()" http_equiv="Permissions-Policy"/><meta content="summary_large_image" name="twitter:card"/><meta content="https://www.axo.dev/meta_small.jpeg" property="og:image"/><meta content="axo" property="og:image:alt"/><meta content="@axodotdev" name="twitter:creator"/><meta content="@axodotdev" name="twitter:site"/><link href="/oranda/oranda-css-v0.0.7.css" rel="stylesheet"/></head><body><div class="container"><div class="repo_banner"><a href="https://github.com/axodotdev/oranda"><div class="github-icon" aria-hidden="true"></div>Check out our GitHub</a></div><main><header><h1 class="title">oranda</h1><nav class="nav"><ul><li><a href="/oranda/">Home</a></li><li><a href="/oranda/artifacts/">Install</a></li><li><a href="/oranda/book/">Docs</a></li><li><a href="/oranda/changelog/">Changelog</a></li></ul></nav></header><div><div><h1>0.0.3 - 2023-05-08</h1><div class="releases-body"><section class="release"><h2 class="hidden" id="tag-v0.0.3"><a href="#v0.0.3">0.0.3 - 2023-05-08</a></h2><div class="release-info"><span class="flex gap-2 items-center"><svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-6 h-6'>
+    <path stroke-linecap='round' stroke-linejoin='round' d='M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z' />
+    <path stroke-linecap='round' stroke-linejoin='round' d='M6 6h.008v.008H6V6z' /></svg>v0.0.3</span><span class="flex gap-2 items-center"><svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-6 h-6'>
+    <path stroke-linecap='round' stroke-linejoin='round' d='M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5' /></svg>May  9 2023 at 01:15 UTC</span></div><div class="mb-6 release-body"><h3>Features</h3>
+<ul>
+<li>
+<p><strong>Individual Changelog pages: <a href="https://github.com/shadows-withal" rel="noopener noreferrer">shadows-withal</a>/<a href="https://github.com/axodotdev/oranda/pull/284" rel="noopener noreferrer">↬284</a></strong></p>
+<p>When announcing a new release- it's often desirable to link to an individual
+release page that contains the changelog/release notes. Previously, we built
+a single page for all the releases- now we build individual pages as well.</p>
+<p>This is the first shipped feature from our new team member, Liv! Yay and
+welcome :)</p>
+</li>
+<li>
+<p><strong>npm installer: <a href="https://github.com/ashleygwilliams" rel="noopener noreferrer">ashleygwilliams</a>/<a href="https://github.com/axodotdev/oranda/pull/288" rel="noopener noreferrer">↬288</a></strong></p>
+<p>As of 0.0.6, <code>cargo-dist</code> will build an npm installer for you! So now you
+can npm or npx oranda!</p>
+</li>
+</ul>
+<h3>Fixes</h3>
+<ul>
+<li>
+<p><strong>Improved configuration support for non-cargo dist users: <a href="https://github.com/pomdtr" rel="noopener noreferrer">pomdtr</a>/<a href="https://github.com/axodotdev/oranda/issues/262" rel="noopener noreferrer">#262</a> , <a href="https://github.com/ashleygwilliams" rel="noopener noreferrer">ashleygwilliams</a>/<a href="https://github.com/axodotdev/oranda/pull/281" rel="noopener noreferrer">↬281</a></strong></p>
+<p>Previously, setting <code>cargo-dist</code> as false, or omitting it should have been
+sufficient to stop oranda from attempting to parse your releases as
+cargo-dist artifacts, however <code>cargo-dist: false</code> did not work! How the
+entire artifacts config object is handled has been reworked and tested.
+Additionally, work from a refactor has also made projects with a mixture of
+cargo-dist and non-cargo-dist releases work much better.</p>
+</li>
+<li>
+<p><strong>Installer header fallback when platform is not detected: <a href="https://github.com/gankra" rel="noopener noreferrer">gankra</a>/<a href="https://github.com/axodotdev/oranda/pull/269" rel="noopener noreferrer">↬269</a></strong></p>
+<p>When you use cargo-dist, we display a header on your index page that
+detects your user's platform and recommends and installer to them. We did
+not previously have a fallback if we detected a system that none of the
+installers supported. Now, in that scenario- we'll offer an artifact
+download as the header option.</p>
+</li>
+<li>
+<p><strong>Dev commands has proper default values: <a href="https://github.com/ashleygwilliams" rel="noopener noreferrer">ashleygwilliams</a>/<a href="https://github.com/axodotdev/oranda/issues/256" rel="noopener noreferrer">#256</a>,<a href="https://github.com/axodotdev/oranda/pull/260" rel="noopener noreferrer">↬260</a></strong></p>
+<p>Due to a false hope that <code>#[derive(Default)]</code> would collect defaults from
+the <code>clap</code> derive API, we shipped the <code>dev</code> command with each argument's
+<em>type's</em> defaults, not the oranda ones. <code>dev</code> now has the same defaults
+that <code>serve</code> does, as is to be expected.</p>
+</li>
+<li>
+<p><strong>Improved typography and layout styles on mobile: <a href="https://github.com/ashleygwilliams" rel="noopener noreferrer">ashleygwilliams</a>/<a href="https://github.com/axodotdev/oranda/issues/234" rel="noopener noreferrer">#234</a>, <a href="https://github.com/SaraVieira" rel="noopener noreferrer">SaraVieira</a>/<a href="https://github.com/axodotdev/oranda/pull/276" rel="noopener noreferrer">↬276</a></strong></p>
+</li>
+</ul>
+<h3>Maintenance</h3>
+<ul>
+<li><strong>Re-add mdbook: <a href="https://github.com/ashleygwilliams" rel="noopener noreferrer">ashleygwilliams</a>/<a href="https://github.com/axodotdev/oranda/issues/190" rel="noopener noreferrer">#190</a>, <a href="https://github.com/gankra" rel="noopener noreferrer">gankra</a>/<a href="https://github.com/axodotdev/oranda/pull/285" rel="noopener noreferrer">↬285</a></strong></li>
+<li><strong>Data fetching refactor: <a href="https://github.com/ashleygwilliams" rel="noopener noreferrer">ashleygwilliams</a>/<a href="https://github.com/axodotdev/oranda/issues/226" rel="noopener noreferrer">#226</a>,<a href="https://github.com/axodotdev/oranda/pull/274" rel="noopener noreferrer">↬274</a></strong></li>
+<li><strong>Update actions/checkout to v3: <a href="https://github.com/ashleygwilliams" rel="noopener noreferrer">ashleygwilliams</a>/<a href="https://github.com/axodotdev/oranda/issues/251" rel="noopener noreferrer">#251</a>,<a href="https://github.com/axodotdev/oranda/pull/255" rel="noopener noreferrer">↬255</a></strong></li>
+</ul>
+</div></section></div></div></div></main><footer><a href="https://github.com/axodotdev/oranda"><div class="github-icon" aria-hidden="true"></div></a><span>oranda, MIT OR Apache-2.0 license.</span></footer></div><script defer="true" src="https://plausible.io/js/script.js" data-domain="opensource.axo.dev"></script><div><script src="/oranda/artifacts.js"></script></div></body></html>

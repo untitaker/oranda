@@ -1,0 +1,61 @@
+<!doctype html><html class="axo dark" id="oranda" lang="en"><head><title>oranda</title><meta content="https://opensource.axo.dev/oranda" property="og:url"/><link href="/oranda/favicon.ico" rel="icon"/><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="🎁 generate beautiful landing pages for your projects" name="description"/><meta content="🎁 generate beautiful landing pages for your projects" name="description"/><meta content="🎁 generate beautiful landing pages for your projects" property="og:description"/><meta content="website" property="og:type"/><meta content="oranda" property="og:title"/><meta content="interest-cohort=()" http_equiv="Permissions-Policy"/><meta content="summary_large_image" name="twitter:card"/><meta content="https://www.axo.dev/meta_small.jpeg" property="og:image"/><meta content="axo" property="og:image:alt"/><meta content="@axodotdev" name="twitter:creator"/><meta content="@axodotdev" name="twitter:site"/><link href="/oranda/oranda-css-v0.0.7.css" rel="stylesheet"/></head><body><div class="container"><div class="repo_banner"><a href="https://github.com/axodotdev/oranda"><div class="github-icon" aria-hidden="true"></div>Check out our GitHub</a></div><main><header><h1 class="title">oranda</h1><nav class="nav"><ul><li><a href="/oranda/">Home</a></li><li><a href="/oranda/artifacts/">Install</a></li><li><a href="/oranda/book/">Docs</a></li><li><a href="/oranda/changelog/">Changelog</a></li></ul></nav></header><div><div><h1>0.0.2 - 2023-04-13</h1><div class="releases-body"><section class="release"><h2 class="hidden" id="tag-v0.0.2"><a href="#v0.0.2">0.0.2 - 2023-04-13</a></h2><div class="release-info"><span class="flex gap-2 items-center"><svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-6 h-6'>
+    <path stroke-linecap='round' stroke-linejoin='round' d='M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z' />
+    <path stroke-linecap='round' stroke-linejoin='round' d='M6 6h.008v.008H6V6z' /></svg>v0.0.2</span><span class="flex gap-2 items-center"><svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-6 h-6'>
+    <path stroke-linecap='round' stroke-linejoin='round' d='M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5' /></svg>Apr 14 2023 at 16:39 UTC</span></div><div class="mb-6 release-body"><h3>Features</h3>
+<ul>
+<li>
+<p><strong>Changelogs - <a href="https://github.com/ashleygwilliams" rel="noopener noreferrer">ashleygwilliams</a>/<a href="https://github.com/axodotdev/oranda/issues/192" rel="noopener noreferrer">#192</a>, <a href="https://github.com/SaraVieira" rel="noopener noreferrer">SaraVieira</a>/<a href="https://github.com/axodotdev/oranda/pull/193" rel="noopener noreferrer">↬193</a></strong></p>
+</li>
+<li>
+<p><strong><code>oranda dev</code> command v1: <a href="https://github.com/ashleygwilliams" rel="noopener noreferrer">ashleygwilliams</a>/<a href="https://github.com/axodotdev/oranda/issues/209" rel="noopener noreferrer">#209</a>,<a href="https://github.com/axodotdev/oranda/pull/240" rel="noopener noreferrer">↬240</a></strong></p>
+<p>It is common to run <code>oranda build &amp;&amp; oranda serve</code> so <code>oranda dev</code> now wraps
+that into a single function. A future version will improve this to include
+watching to automatically rebuild on changes, while serve continues to run
+uninterrupted.`</p>
+</li>
+<li>
+<p><strong>Additional pages takes a hashmap to allow custom nav names: <a href="https://github.com/ashleygwilliams" rel="noopener noreferrer">ashleygwilliams</a>/<a href="https://github.com/axodotdev/oranda/issues/115" rel="noopener noreferrer">#115</a>, <a href="https://github.com/SaraVieira" rel="noopener noreferrer">SaraVieira</a>/<a href="https://github.com/axodotdev/oranda/pull/203" rel="noopener noreferrer">↬203</a></strong></p>
+<p>Previously, the nav element for an additional page was inferred from its filename.
+However, this led to some unfortunate presentations- especially if the additional
+page had an all caps filename while others did not. This new data structure
+allows you to provide the specific string you'd like to see in the nav for
+any additional page.</p>
+</li>
+<li>
+<p><strong>Improved error handling: <a href="https://github.com/spitfire05" rel="noopener noreferrer">spitfire05</a>/<a href="https://github.com/axodotdev/oranda/issues/206" rel="noopener noreferrer">#206</a>, <a href="https://github.com/ashleygwilliams" rel="noopener noreferrer">ashleygwilliams</a>/<a href="https://github.com/axodotdev/oranda/pull/191" rel="noopener noreferrer">↬191</a>, <a href="https://github.com/SaraVieira" rel="noopener noreferrer">SaraVieira</a>/<a href="https://github.com/axodotdev/oranda/pull/193" rel="noopener noreferrer">↬193</a>,<a href="https://github.com/axodotdev/oranda/pull/201" rel="noopener noreferrer">↬201</a></strong></p>
+<p>Several PRs over the course of the last milestone have dramatically improved
+error handling: from replacing panics with proper errors to adding more
+descriptive errors with messages that help you better understand and solve
+the issue.</p>
+</li>
+<li>
+<p><strong>Themes: <a href="https://github.com/SaraVieira" rel="noopener noreferrer">SaraVieira</a>/<a href="https://github.com/axodotdev/oranda/pull/208" rel="noopener noreferrer">↬208</a></strong></p>
+<p>There are now 2 additional themes- light(default), dark, hacker, and cupcake.</p>
+</li>
+<li>
+<p><strong>Version number and publish date on installer header: <a href="https://github.com/ashleygwilliams" rel="noopener noreferrer">ashleygwilliams</a>/<a href="https://github.com/axodotdev/oranda/issues/194" rel="noopener noreferrer">#194</a>, <a href="https://github.com/SaraVieira" rel="noopener noreferrer">SaraVieira</a>/<a href="https://github.com/axodotdev/oranda/pull/217" rel="noopener noreferrer">↬217</a></strong></p>
+</li>
+<li>
+<p><strong>Improved styling: <a href="https://github.com/SaraVieira" rel="noopener noreferrer">SaraVieira</a>/<a href="https://github.com/axodotdev/oranda/pull/202" rel="noopener noreferrer">↬202</a>,<a href="https://github.com/axodotdev/oranda/pull/220" rel="noopener noreferrer">↬220</a></strong></p>
+</li>
+</ul>
+<h3>Fixes</h3>
+<ul>
+<li>
+<p><strong>Code block with unsupported highlight annotations should show as plaintext: <a href="https://github.com/spitfire05" rel="noopener noreferrer">spitfire05</a>/<a href="https://github.com/axodotdev/oranda/issues/236" rel="noopener noreferrer">#236</a>, <a href="https://github.com/SaraVieira" rel="noopener noreferrer">SaraVieira</a>/<a href="https://github.com/axodotdev/oranda/pull/237" rel="noopener noreferrer">↬237</a></strong></p>
+<p>Annotating a code block with an unsupported language highlight led to blocks
+simply not rendering at all. Now they will render as plainttext and will show
+a warning to request support.</p>
+</li>
+<li>
+<p><strong>Nav should show if using dist/changelog, but not additional pages: <a href="https://github.com/ashleygwilliams" rel="noopener noreferrer">ashleygwilliams</a>/<a href="https://github.com/axodotdev/oranda/issues/183" rel="noopener noreferrer">#183</a>,<a href="https://github.com/axodotdev/oranda/pull/187" rel="noopener noreferrer">↬187</a></strong></p>
+<p>Originally, we would only generate a nav if a user configured additional
+markdown pages. However, nav is also needed if a user configures their
+project to use cargo-dist or render changelogs.</p>
+</li>
+</ul>
+<h3>Maintenance</h3>
+<ul>
+<li><strong>Update cargo-dist to enable Mac ARM builds: <a href="https://github.com/pomdtr" rel="noopener noreferrer">pomdtr</a>/<a href="https://github.com/axodotdev/oranda/issues/198" rel="noopener noreferrer">#198</a>, <a href="https://github.com/ashleygwilliams" rel="noopener noreferrer">ashleygwilliams</a>/<a href="https://github.com/axodotdev/oranda/pull/248" rel="noopener noreferrer">↬248</a></strong></li>
+</ul>
+</div></section></div></div></div></main><footer><a href="https://github.com/axodotdev/oranda"><div class="github-icon" aria-hidden="true"></div></a><span>oranda, MIT OR Apache-2.0 license.</span></footer></div><script defer="true" src="https://plausible.io/js/script.js" data-domain="opensource.axo.dev"></script><div><script src="/oranda/artifacts.js"></script></div></body></html>
